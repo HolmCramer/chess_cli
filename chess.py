@@ -187,7 +187,10 @@ class GUI():
     gamestate = Gamestate().gamestate
 
     def __init__(self):
-        # Border Top
+        pass
+
+    def drawBoard(self):
+                # Border Top
         print(" " + 6*Board().width*"_", end="")
         print()
         # y Zeilennummer
@@ -245,9 +248,16 @@ class GUI():
         print(" " + 6*self.board.width*"¯", end="")
         print()
 
-    def updateGUI(self, newGamestate):
-        self.gamestate = newGamestate
-        self.__init__()
+    def enterMove(self):
+        moveInput = ""
+        print("Enter a Valid Move like in the Format 'D2 to D4'!")
+        moveInput = input("Enter a Move: ")
+        return moveInput
+
+
+    # def updateGUI(self, newGamestate):
+    #     self.gamestate = newGamestate
+    #     self.__init__()
 
 
 class Main():
@@ -259,23 +269,31 @@ class Main():
 
     def play(self):
         while True:
-            moveIn = input("Enter a valid move for example 'D2 to D3'\n"
-                           + "Enter your move here:")
-            break
-        return moveIn
+            self.gui.drawBoard()
+            input = self.gui.enterMove()
+            if input == "quit":
+                break
+            else:
+                self.gamestate.move(input)
+            # moveIn = input("Enter a valid move for example 'D2 to D3'\n"
+            #                + "Enter your move here: ")
+        
+        # while True:
+        #     self.gui.drawBoard()
 
 
 main = Main()
+main.play()
 # main.gamestate.move("D2 B5")
 # test = main.gamestate.inputConv("B2")
 # print(test)
 # main.gamestate.move("D2 to D3")
 # main.gamestate.move("D3D4")
-main.gamestate.move("B1 to C3")
+# main.gamestate.move("B1 to C3")
 # print(main.gamestate.inputConv("D2"))
 # print(main.gamestate.inputConv("D3"))
 # print(main.gamestate.gamestate[3][6])
 # print(main.gamestate.gamestate[3][5])
-main.gui.updateGUI(main.gamestate.gamestate)
+# main.gui.updateGUI(main.gamestate.gamestate)
 # print(type(main.gamestate.gamestate))
 # main.play()
