@@ -66,7 +66,7 @@ class Rook(Piece):
 
 class Pawn(Piece):
     whitePawn = "♙"
-    blackPawn = "♟️"
+    blackPawn = "♟"
 
     def __init__(self, pieceColor):
         super().__init__(pieceColor)
