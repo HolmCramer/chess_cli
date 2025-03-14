@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is one of the first small projects I made during my reschooling. With the self imposed rule to to only use built-ins and no other dependencies.
+This is one of the first small projects I made during my career change training. With the self imposed rule to only use built-ins and no other dependencies.
 
 It's a simple CLI Chess application with movable pieces but without the chess rules.
 
