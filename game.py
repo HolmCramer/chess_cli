@@ -16,8 +16,3 @@ class Game():
                 break
             else:
                 self.gamestate.move(input, self.board)
-            # moveIn = input("Enter a valid move for example 'D2 to D3'\n"
-            #                + "Enter your move here: ")
-        
-        # while True:
-        #     self.gui.drawBoard()
