@@ -16,7 +16,6 @@ class Board:
 
     def coordConv(self) -> None:
         letters = "ABCDEFGH"
-        # initialisierung eines zweidimensionalen 8x8 arrays gefüllt mit 0
         self.coords = [["" for _ in range(8)] for _ in range(8)]
         i = 8
 

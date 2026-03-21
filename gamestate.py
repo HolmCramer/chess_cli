@@ -8,7 +8,6 @@ from utils import BOARD_SIZE, COLOR, inputConv
 class Gamestate:
 
     def __init__(self) -> None:
-        # initialisierung der Anzahl an Figuren für die Startaufstellung
         self.gamestate: list[list[Optional[Piece]]] = [
             [None for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)
         ]
@@ -25,7 +24,6 @@ class Gamestate:
         self.blackRook: list[Rook] = [Rook(COLOR.BLACK) for _ in range(2)]
         self.blackPawn: list[Pawn] = [Pawn(COLOR.BLACK) for _ in range(8)]
 
-        # Positionierung der schwarzen Figuren in der Startaufstellung
         self.gamestate[0][0] = self.blackRook[0]
         self.gamestate[1][0] = self.blackKnight[0]
         self.gamestate[2][0] = self.blackBishop[0]
@@ -37,7 +35,6 @@ class Gamestate:
         for square in range(8):
             self.gamestate[square][1] = self.blackPawn[square]
 
-        # Positionierung der weißen Figuren in der Startaufstellung
         for square in range(8):
             self.gamestate[square][6] = self.whitePawn[square]
         self.gamestate[0][7] = self.whiteRook[0]
