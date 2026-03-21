@@ -16,17 +16,14 @@ class Board:
                 squares.append(Square(COLOR((row + column) % 2), row, column))
         return squares
 
-    def inputConv(self, chessNotation: str) -> tuple:
-        stateCoordsX = 0
-        stateCoordsY = 0
+    def inputConv(self, chessNotation: str) -> int:
+        index = 0
 
-        for y, k in enumerate(self.coords):
-            for x, l in enumerate(k):
-                if l == chessNotation:
-                    stateCoordsX = x
-                    stateCoordsY = y
+        for i, square in enumerate(self.squares):
+            if square is not None and square.coord == chessNotation:
+                index = i
 
-        return stateCoordsX, stateCoordsY
+        return index
 
 
 class Square:

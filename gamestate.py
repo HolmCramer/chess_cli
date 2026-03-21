@@ -49,19 +49,17 @@ class Gamestate:
         pieceCoords = chessNotation[:2]
         moveCoords = chessNotation[-2::]
 
-        yConvPieceCoords, xConvPieceCoords = board.inputConv(pieceCoords)
-        yConvMoveCoords, xConvMoveCoords = board.inputConv(moveCoords)
+        ConvPieceCoords = board.inputConv(pieceCoords)
+        ConvMoveCoords = board.inputConv(moveCoords)
 
-        if self.gamestate[yConvPieceCoords][xConvPieceCoords] is None:
+        if self.gamestate[ConvPieceCoords] is None:
             print("Enter a square with a piece on it!")
         elif (
-            self.gamestate[yConvMoveCoords][xConvMoveCoords] is not None
-            or self.gamestate[yConvMoveCoords][xConvMoveCoords] is None
+            self.gamestate[ConvMoveCoords] is not None
+            or self.gamestate[ConvMoveCoords] is None
         ):
-            self.gamestate[yConvMoveCoords][xConvMoveCoords] = self.gamestate[
-                yConvPieceCoords
-            ][xConvPieceCoords]
-            self.gamestate[yConvPieceCoords][xConvPieceCoords] = None
+            self.gamestate[ConvMoveCoords] = self.gamestate[ConvPieceCoords]
+            self.gamestate[ConvPieceCoords] = None
             print("Move done!")
         else:
             print("Enter a valid square to move to!")
