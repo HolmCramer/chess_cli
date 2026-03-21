@@ -11,17 +11,10 @@ class GUI:
     def drawBoard(self, gamestate: Gamestate) -> None:
         self.clear_terminal()
         self.draw_top_boarder()
-        for y in range(self.board.height):
-            for lines in range(3):
-                if lines == 0:
-                    self.print_top(y)
-                if lines == 1:
-                    self.print_mid(y, gamestate)
-                if lines == 2:
-                    self.print_bottom(y)
+        self.draw_mid(gamestate)
         self.draw_bottom_boarder()
 
-    def print_top(self, y) -> None:
+    def print_top(self, y: int) -> None:
         print("|", end="")
         for x in range(self.board.width):
             square = self.board.squares[x][y]
@@ -32,7 +25,7 @@ class GUI:
         print("|", end="")
         print()
 
-    def print_mid(self, y, gamestate) -> None:
+    def print_mid(self, y: int, gamestate: Gamestate) -> None:
         print("|", end="")
         for x in range(self.board.width):
             square = self.board.squares[x][y]
@@ -59,7 +52,7 @@ class GUI:
         print("|", end="")
         print()
 
-    def print_bottom(self, y) -> None:
+    def print_bottom(self, y: int) -> None:
         print("|", end="")
         for x in range(self.board.width):
             square = self.board.squares[x][y]
@@ -79,6 +72,16 @@ class GUI:
     def draw_bottom_boarder(self) -> None:
         print(" " + 6 * self.board.width * "¯", end="")
         print()
+
+    def draw_mid(self, gamestate: Gamestate) -> None:
+        for y in range(self.board.height):
+            for lines in range(3):
+                if lines == 0:
+                    self.print_top(y)
+                if lines == 1:
+                    self.print_mid(y, gamestate)
+                if lines == 2:
+                    self.print_bottom(y)
 
     def clear_terminal(self) -> None:
         print("\033[H\033[J", end="")
