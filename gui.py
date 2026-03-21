@@ -6,18 +6,18 @@ from utils import COLOR
 class GUI:
 
     def __init__(self) -> None:
-        pass
+        self.board = Board()
 
-    def drawBoard(self, board: Board, gamestate: Gamestate) -> None:
+    def drawBoard(self, gamestate: Gamestate) -> None:
         print("\033[H\033[J", end="")
-        print(" " + 6 * board.width * "_", end="")
+        print(" " + 6 * self.board.width * "_", end="")
         print()
-        for y in range(board.height):
+        for y in range(self.board.height):
             for lines in range(3):
                 if lines == 0:
                     print("|", end="")
-                    for x in range(board.width):
-                        square = board.squares[x][y]
+                    for x in range(self.board.width):
+                        square = self.board.squares[x][y]
                         if square is not None and square.color == COLOR.WHITE:
                             print(6 * Square.whiteASCII, end="")
                         else:
@@ -26,8 +26,8 @@ class GUI:
                     print()
                 if lines == 1:
                     print("|", end="")
-                    for x in range(board.width):
-                        square = board.squares[x][y]
+                    for x in range(self.board.width):
+                        square = self.board.squares[x][y]
                         piece = (
                             gamestate.gamestate[x][y]
                             if gamestate.gamestate[x][y] is not None
@@ -52,17 +52,17 @@ class GUI:
                     print()
                 if lines == 2:
                     print("|", end="")
-                    for x in range(board.width):
-                        square = board.squares[x][y]
+                    for x in range(self.board.width):
+                        square = self.board.squares[x][y]
                         if square is not None and square.color == COLOR.WHITE:
-                            print(board.coords[y][x], end="")
+                            print(self.board.coords[y][x], end="")
                             print(4 * Square.whiteASCII, end="")
                         else:
-                            print(board.coords[y][x], end="")
+                            print(self.board.coords[y][x], end="")
                             print(4 * Square.blackASCII, end="")
                     print("|", end="")
                     print()
-        print(" " + 6 * board.width * "¯", end="")
+        print(" " + 6 * self.board.width * "¯", end="")
         print()
 
     def enterMove(self) -> str:

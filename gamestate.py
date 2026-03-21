@@ -2,7 +2,7 @@ from typing import Optional
 
 from board import Board
 from pieces import *
-from utils import BOARD_SIZE, COLOR, inputConv
+from utils import BOARD_SIZE, COLOR
 
 
 class Gamestate:
@@ -51,8 +51,8 @@ class Gamestate:
         pieceCoords = chessNotation[:2]
         moveCoords = chessNotation[-2::]
 
-        yConvPieceCoords, xConvPieceCoords = inputConv(pieceCoords, board)
-        yConvMoveCoords, xConvMoveCoords = inputConv(moveCoords, board)
+        yConvPieceCoords, xConvPieceCoords = board.inputConv(pieceCoords)
+        yConvMoveCoords, xConvMoveCoords = board.inputConv(moveCoords)
 
         if self.gamestate[yConvPieceCoords][xConvPieceCoords] == 0:
             print("Enter a square with a piece on it!")

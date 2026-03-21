@@ -24,6 +24,18 @@ class Board:
                 self.coords[y][x] = letter + str(i)
             i = i - 1
 
+    def inputConv(self, chessNotation: str) -> tuple:
+        stateCoordsX = 0
+        stateCoordsY = 0
+
+        for y, k in enumerate(self.coords):
+            for x, l in enumerate(k):
+                if l == chessNotation:
+                    stateCoordsX = x
+                    stateCoordsY = y
+
+        return stateCoordsX, stateCoordsY
+
 
 class Square:
 
