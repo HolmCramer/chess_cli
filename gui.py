@@ -20,15 +20,9 @@ class GUI:
         self.draw_bottom_boarder()
 
     def draw_rank(self, n: int, gamestate: Gamestate) -> None:
-        self.row_color(n)
         self.print_top(n)
         self.print_mid(n, gamestate)
         self.print_bottom(n)
-
-    def row_color(self, n) -> bool:
-        if n % 2 == 1:
-            return False
-        return True
 
     def print_top(self, n: int) -> None:
         print("|", end="")
