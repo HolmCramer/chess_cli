@@ -1,7 +1,8 @@
 from chess import *
 from gui import GUI, Board
 
-class Game():
+
+class Game:
 
     def __init__(self):
         self.board = Board()

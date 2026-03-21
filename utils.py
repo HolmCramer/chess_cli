@@ -1,4 +1,3 @@
-
 def inputConv(chessNotation, board):
     stateCoordsX = 0
     stateCoordsY = 0
@@ -9,5 +8,6 @@ def inputConv(chessNotation, board):
             if l == chessNotation:
                 stateCoordsX = x
                 stateCoordsY = y
-                
+
     return stateCoordsX, stateCoordsY
+

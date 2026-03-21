@@ -1,7 +1,8 @@
 from pieces import *
 from utils import inputConv
 
-class Gamestate():
+
+class Gamestate:
 
     def __init__(self):
         # initialisierung der Anzahl an Figuren für die Startaufstellung
@@ -43,7 +44,6 @@ class Gamestate():
         self.gamestate[6][7] = self.whiteKnight[1]
         self.gamestate[7][7] = self.whiteRook[1]
 
-
     def move(self, chessNotation, board):
 
         pieceCoords = chessNotation[:2]
@@ -54,15 +54,20 @@ class Gamestate():
 
         if self.gamestate[yConvPieceCoords][xConvPieceCoords] == 0:
             print("Enter a square with a piece on it!")
-        elif self.gamestate[yConvMoveCoords][xConvMoveCoords] != 0 or self.gamestate[yConvMoveCoords][xConvMoveCoords] == 0:
-            self.gamestate[yConvMoveCoords][xConvMoveCoords] = self.gamestate[yConvPieceCoords][xConvPieceCoords]
+        elif (
+            self.gamestate[yConvMoveCoords][xConvMoveCoords] != 0
+            or self.gamestate[yConvMoveCoords][xConvMoveCoords] == 0
+        ):
+            self.gamestate[yConvMoveCoords][xConvMoveCoords] = self.gamestate[
+                yConvPieceCoords
+            ][xConvPieceCoords]
             self.gamestate[yConvPieceCoords][xConvPieceCoords] = 0
             print("Move done!")
         else:
             print("Enter a valid square to move to!")
 
 
-class Player():
+class Player:
 
     def __init__(self):
         pass
