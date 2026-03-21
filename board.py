@@ -6,35 +6,24 @@ from utils import BOARD_SIZE, COLOR
 class Board:
 
     def __init__(self) -> None:
-        self.width: int = BOARD_SIZE
-        self.height: int = BOARD_SIZE
-        self.squares: list[list[Optional[Square]]] = [
-            [Square(COLOR((x + y) % 2)) for x in range(self.width)]
-            for y in range(self.height)
-        ]
-        self.coordConv()
+        self.size: int = BOARD_SIZE
+        self.squares: list[Optional[Square]] = self.create_squares()
 
-    def coordConv(self) -> None:
-        letters = "ABCDEFGH"
-        self.coords = [["" for _ in range(8)] for _ in range(8)]
-        i = 8
+    def create_squares(self) -> list[Optional[Square]]:
+        squares = []
+        for row in range(self.size):
+            for column in range(self.size):
+                squares.append(Square(COLOR((row + column) % 2), row, column))
+        return squares
 
-        for y in range(0, 8):
-            for x, letter in enumerate(letters):
-                self.coords[y][x] = letter + str(i)
-            i = i - 1
+    def inputConv(self, chessNotation: str) -> int:
+        index = 0
 
-    def inputConv(self, chessNotation: str) -> tuple:
-        stateCoordsX = 0
-        stateCoordsY = 0
+        for i, square in enumerate(self.squares):
+            if square is not None and square.coord == chessNotation:
+                index = i
 
-        for y, k in enumerate(self.coords):
-            for x, l in enumerate(k):
-                if l == chessNotation:
-                    stateCoordsX = x
-                    stateCoordsY = y
-
-        return stateCoordsX, stateCoordsY
+        return index
 
 
 class Square:
@@ -42,5 +31,10 @@ class Square:
     blackASCII = " "
     whiteASCII = "█"
 
-    def __init__(self, color: COLOR) -> None:
+    def __init__(self, color: COLOR, row: int, column: int) -> None:
         self.color = color
+        self.coord = self.create_coord(row, column)
+
+    def create_coord(self, row: int, column: int) -> str:
+        letters = "ABCDEFGH"
+        return f"{letters[column]}{8 - row}"

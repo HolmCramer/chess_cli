@@ -11,13 +11,29 @@ class GUI:
     def drawBoard(self, gamestate: Gamestate) -> None:
         self.clear_terminal()
         self.draw_top_boarder()
-        self.draw_mid(gamestate)
+        n = 0
+
+        for _ in range(self.board.size):
+            self.draw_rank(n, gamestate)
+            n += 8
+
         self.draw_bottom_boarder()
 
-    def print_top(self, y: int) -> None:
+    def draw_rank(self, n: int, gamestate: Gamestate) -> None:
+        self.row_color(n)
+        self.print_top(n)
+        self.print_mid(n, gamestate)
+        self.print_bottom(n)
+
+    def row_color(self, n) -> bool:
+        if n % 2 == 1:
+            return False
+        return True
+
+    def print_top(self, n: int) -> None:
         print("|", end="")
-        for x in range(self.board.width):
-            square = self.board.squares[x][y]
+        for i in range(self.board.size):
+            square = self.board.squares[n + i]
             if square is not None and square.color == COLOR.WHITE:
                 print(6 * Square.whiteASCII, end="")
             else:
@@ -25,13 +41,13 @@ class GUI:
         print("|", end="")
         print()
 
-    def print_mid(self, y: int, gamestate: Gamestate) -> None:
+    def print_mid(self, n: int, gamestate: Gamestate) -> None:
         print("|", end="")
-        for x in range(self.board.width):
-            square = self.board.squares[x][y]
+        for x in range(self.board.size):
+            square = self.board.squares[x + n]
             piece = (
-                gamestate.gamestate[x][y]
-                if gamestate.gamestate[x][y] is not None
+                gamestate.gamestate[x + n]
+                if gamestate.gamestate[x + n] is not None
                 else None
             )
 
@@ -52,36 +68,26 @@ class GUI:
         print("|", end="")
         print()
 
-    def print_bottom(self, y: int) -> None:
+    def print_bottom(self, n: int) -> None:
         print("|", end="")
-        for x in range(self.board.width):
-            square = self.board.squares[x][y]
+        for x in range(self.board.size):
+            square = self.board.squares[x + n]
             if square is not None and square.color == COLOR.WHITE:
-                print(self.board.coords[y][x], end="")
+                print(square.coord, end="")
                 print(4 * Square.whiteASCII, end="")
-            else:
-                print(self.board.coords[y][x], end="")
+            elif square is not None:
+                print(square.coord, end="")
                 print(4 * Square.blackASCII, end="")
         print("|", end="")
         print()
 
     def draw_top_boarder(self) -> None:
-        print(" " + 6 * self.board.width * "_", end="")
+        print(" " + 6 * self.board.size * "_", end="")
         print()
 
     def draw_bottom_boarder(self) -> None:
-        print(" " + 6 * self.board.width * "¯", end="")
+        print(" " + 6 * self.board.size * "¯", end="")
         print()
-
-    def draw_mid(self, gamestate: Gamestate) -> None:
-        for y in range(self.board.height):
-            for lines in range(3):
-                if lines == 0:
-                    self.print_top(y)
-                if lines == 1:
-                    self.print_mid(y, gamestate)
-                if lines == 2:
-                    self.print_bottom(y)
 
     def clear_terminal(self) -> None:
         print("\033[H\033[J", end="")
