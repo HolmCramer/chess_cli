@@ -9,6 +9,7 @@ class GUI:
         pass
 
     def drawBoard(self, board: Board, gamestate: Gamestate) -> None:
+        print("\033[H\033[J", end="")
         print(" " + 6 * board.width * "_", end="")
         print()
         for y in range(board.height):
