@@ -6,23 +6,20 @@ from utils import BOARD_SIZE, COLOR
 class Board:
 
     def __init__(self) -> None:
-        self.width: int = BOARD_SIZE
-        self.height: int = BOARD_SIZE
-        self.squares: list[list[Optional[Square]]] = [
-            [Square(COLOR((x + y) % 2)) for x in range(self.width)]
-            for y in range(self.height)
+        self.size: int = BOARD_SIZE
+        self.squares: list[Optional[Square]] = [
+            Square(COLOR(((i // self.size) + (i % self.size)) % 2))
+            for i in range(self.size * self.size)
         ]
         self.coordConv()
 
     def coordConv(self) -> None:
         letters = "ABCDEFGH"
-        self.coords = [["" for _ in range(8)] for _ in range(8)]
-        i = 8
+        self.coords = ["" for _ in range(len(letters) ** 2)]
 
-        for y in range(0, 8):
-            for x, letter in enumerate(letters):
-                self.coords[y][x] = letter + str(i)
-            i = i - 1
+        for y in range(len(letters)):
+            for x in range(len(letters)):
+                self.coords[x + y] = letters[x] + str(8 - y)
 
     def inputConv(self, chessNotation: str) -> tuple:
         stateCoordsX = 0
