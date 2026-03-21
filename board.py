@@ -7,19 +7,14 @@ class Board:
 
     def __init__(self) -> None:
         self.size: int = BOARD_SIZE
-        self.squares: list[Optional[Square]] = [
-            Square(COLOR(((i // self.size) + (i % self.size)) % 2))
-            for i in range(self.size * self.size)
-        ]
-        self.coordConv()
+        self.squares: list[Optional[Square]] = self.create_squares()
 
-    def coordConv(self) -> None:
-        letters = "ABCDEFGH"
-        self.coords = ["" for _ in range(len(letters) ** 2)]
-
-        for y in range(len(letters)):
-            for x in range(len(letters)):
-                self.coords[x + y] = letters[x] + str(8 - y)
+    def create_squares(self) -> list[Optional[Square]]:
+        squares = []
+        for row in range(self.size):
+            for column in range(self.size):
+                squares.append(Square(COLOR((row + column) % 2), row, column))
+        return squares
 
     def inputConv(self, chessNotation: str) -> tuple:
         stateCoordsX = 0
@@ -39,5 +34,10 @@ class Square:
     blackASCII = " "
     whiteASCII = "█"
 
-    def __init__(self, color: COLOR) -> None:
+    def __init__(self, color: COLOR, row: int, column: int) -> None:
         self.color = color
+        self.coord = self.create_coord(row, column)
+
+    def create_coord(self, row: int, column: int) -> str:
+        letters = "ABCDEFGH"
+        return f"{letters[column]}{8 - row}"
