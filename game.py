@@ -12,7 +12,7 @@ class Game:
         while True:
             self.gui.drawBoard(self.gamestate)
             input = self.gui.enterMove()
-            if input == "quit":
+            if input == "QUIT" or input == "Q":
                 break
             else:
                 self.gamestate.move(input, self.gui.board)

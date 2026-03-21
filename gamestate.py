@@ -54,11 +54,11 @@ class Gamestate:
         yConvPieceCoords, xConvPieceCoords = board.inputConv(pieceCoords)
         yConvMoveCoords, xConvMoveCoords = board.inputConv(moveCoords)
 
-        if self.gamestate[yConvPieceCoords][xConvPieceCoords] == 0:
+        if self.gamestate[yConvPieceCoords][xConvPieceCoords] is None:
             print("Enter a square with a piece on it!")
         elif (
-            self.gamestate[yConvMoveCoords][xConvMoveCoords] != 0
-            or self.gamestate[yConvMoveCoords][xConvMoveCoords] == 0
+            self.gamestate[yConvMoveCoords][xConvMoveCoords] is not None
+            or self.gamestate[yConvMoveCoords][xConvMoveCoords] is None
         ):
             self.gamestate[yConvMoveCoords][xConvMoveCoords] = self.gamestate[
                 yConvPieceCoords
