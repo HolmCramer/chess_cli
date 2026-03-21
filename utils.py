@@ -1,4 +1,9 @@
-def inputConv(chessNotation, board):
+from enum import Enum
+
+BOARD_SIZE = 8
+
+
+def inputConv(chessNotation, board) -> tuple:
     stateCoordsX = 0
     stateCoordsY = 0
 
@@ -11,3 +16,7 @@ def inputConv(chessNotation, board):
 
     return stateCoordsX, stateCoordsY
 
+
+class COLOR(Enum):
+    WHITE = 0
+    BLACK = 1

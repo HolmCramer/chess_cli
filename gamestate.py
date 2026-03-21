@@ -1,24 +1,29 @@
+from typing import Optional
+
+from board import Board
 from pieces import *
-from utils import inputConv
+from utils import BOARD_SIZE, COLOR, inputConv
 
 
 class Gamestate:
 
-    def __init__(self):
+    def __init__(self) -> None:
         # initialisierung der Anzahl an Figuren für die Startaufstellung
-        self.gamestate = [[0 for _ in range(8)] for _ in range(8)]
-        self.whiteKing = [King(0)]
-        self.whiteQueen = [Queen(0)]
-        self.whiteBishop = [Bishop(0) for _ in range(2)]
-        self.whiteKnight = [Knight(0) for _ in range(2)]
-        self.whiteRook = [Rook(0) for _ in range(2)]
-        self.whitePawn = [Pawn(0) for _ in range(8)]
-        self.blackKing = [King(1)]
-        self.blackQueen = [Queen(1)]
-        self.blackBishop = [Bishop(1) for _ in range(2)]
-        self.blackKnight = [Knight(1) for _ in range(2)]
-        self.blackRook = [Rook(1) for _ in range(2)]
-        self.blackPawn = [Pawn(1) for _ in range(8)]
+        self.gamestate: list[list[Optional[Piece]]] = [
+            [None for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)
+        ]
+        self.whiteKing: list[King] = [King(COLOR.WHITE)]
+        self.whiteQueen: list[Queen] = [Queen(COLOR.WHITE)]
+        self.whiteBishop: list[Bishop] = [Bishop(COLOR.WHITE) for _ in range(2)]
+        self.whiteKnight: list[Knight] = [Knight(COLOR.WHITE) for _ in range(2)]
+        self.whiteRook: list[Rook] = [Rook(COLOR.WHITE) for _ in range(2)]
+        self.whitePawn: list[Pawn] = [Pawn(COLOR.WHITE) for _ in range(8)]
+        self.blackKing: list[King] = [King(COLOR.BLACK)]
+        self.blackQueen: list[Queen] = [Queen(COLOR.BLACK)]
+        self.blackBishop: list[Bishop] = [Bishop(COLOR.BLACK) for _ in range(2)]
+        self.blackKnight: list[Knight] = [Knight(COLOR.BLACK) for _ in range(2)]
+        self.blackRook: list[Rook] = [Rook(COLOR.BLACK) for _ in range(2)]
+        self.blackPawn: list[Pawn] = [Pawn(COLOR.BLACK) for _ in range(8)]
 
         # Positionierung der schwarzen Figuren in der Startaufstellung
         self.gamestate[0][0] = self.blackRook[0]
@@ -44,7 +49,7 @@ class Gamestate:
         self.gamestate[6][7] = self.whiteKnight[1]
         self.gamestate[7][7] = self.whiteRook[1]
 
-    def move(self, chessNotation, board):
+    def move(self, chessNotation: str, board: Board) -> None:
 
         pieceCoords = chessNotation[:2]
         moveCoords = chessNotation[-2::]
@@ -61,13 +66,7 @@ class Gamestate:
             self.gamestate[yConvMoveCoords][xConvMoveCoords] = self.gamestate[
                 yConvPieceCoords
             ][xConvPieceCoords]
-            self.gamestate[yConvPieceCoords][xConvPieceCoords] = 0
+            self.gamestate[yConvPieceCoords][xConvPieceCoords] = None
             print("Move done!")
         else:
             print("Enter a valid square to move to!")
-
-
-class Player:
-
-    def __init__(self):
-        pass

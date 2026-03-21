@@ -2,6 +2,7 @@ class Piece:
 
     def __init__(self, pieceColor):
         self.pieceColor = pieceColor
+        self.icon = ""
 
 
 class King(Piece):
@@ -74,4 +75,3 @@ class Pawn(Piece):
             self.icon = self.whitePawn
         else:
             self.icon = self.blackPawn
-
