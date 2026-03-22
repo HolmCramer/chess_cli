@@ -76,6 +76,12 @@ class Arbiter:
             pos + 9,
             pos - 9,
         ]
+        if (
+            dest in valid_moves
+            and state[dest] is not None
+            and state[dest].color == state[pos].color
+        ):
+            return False
         if dest in valid_moves:
             return True
         else:
