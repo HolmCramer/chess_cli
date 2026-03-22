@@ -126,16 +126,7 @@ class Arbiter:
     def is_valid_knight_move(self, gamestate: Gamestate, move: tuple) -> bool:
         state = gamestate.gamestate
         pos, dest = move
-        valid_moves = [
-            pos + 1,
-            pos - 1,
-            pos + 7,
-            pos - 7,
-            pos + 8,
-            pos - 8,
-            pos + 9,
-            pos - 9,
-        ]
+        valid_moves = [pos - 10, pos - 6]
         if dest in valid_moves:
             return True
         else:
