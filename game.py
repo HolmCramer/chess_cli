@@ -1,3 +1,4 @@
+from arbiter import Arbiter
 from gamestate import Gamestate
 from gui import GUI
 
@@ -7,6 +8,7 @@ class Game:
     def __init__(self) -> None:
         self.gamestate = Gamestate()
         self.gui = GUI()
+        self.arbiter = Arbiter()
 
     def play(self) -> None:
         while True:
@@ -16,4 +18,5 @@ class Game:
                 break
             else:
                 move = self.gui.to_move(input)
-                self.gamestate.move(move)
+                if self.arbiter.check(self.gamestate, move):
+                    self.gamestate.move(move)
