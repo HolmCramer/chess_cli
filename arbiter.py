@@ -1,6 +1,6 @@
 from gamestate import Gamestate
-from pieces import King, Piece
-from utils import COLOR
+from pieces import Piece
+from utils import KIND
 
 
 class Arbiter:
@@ -38,6 +38,28 @@ class Arbiter:
             return False
 
     def is_valid_piece_move(self, state: Gamestate, move: tuple) -> bool:
-        piece_coord, move_coord = move
-        piece_type = state.gamestate[piece_coord].kind
-        return True
+        kind = state.gamestate[move[0]].kind
+        if kind == KIND.KING and self.is_valid_king_move(state, move):
+            return True
+        if kind == KIND.QUEEN and self.is_valid_king_move(state, move):
+            return True
+        else:
+            return False
+
+    def is_valid_king_move(self, gamestate: Gamestate, move: tuple) -> bool:
+        state = gamestate.gamestate
+        pos, dest = move
+        valid_moves = [
+            pos + 1,
+            pos - 1,
+            pos + 7,
+            pos - 7,
+            pos + 8,
+            pos - 8,
+            pos + 9,
+            pos - 9,
+        ]
+        if dest in valid_moves:
+            return True
+        else:
+            return False
