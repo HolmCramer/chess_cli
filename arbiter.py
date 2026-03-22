@@ -1,5 +1,6 @@
 from gamestate import Gamestate
-from pieces import Piece
+from pieces import King, Piece
+from utils import COLOR
 
 
 class Arbiter:
@@ -11,6 +12,8 @@ class Arbiter:
         if not self.is_valid_piece_coord(state, piece_coord):
             return False
         if not self.is_valid_move_coord(state, move_coord):
+            return False
+        if not self.is_valid_piece_move(state, move):
             return False
         return True
 
@@ -25,8 +28,6 @@ class Arbiter:
     def is_valid_move_coord(self, state: Gamestate, move_coord: int) -> bool:
         if len(state.gamestate) < move_coord:
             return False
-        elif isinstance(state.gamestate[move_coord], Piece):
-            return False
         else:
             return True
 
@@ -35,3 +36,8 @@ class Arbiter:
             return True
         else:
             return False
+
+    def is_valid_piece_move(self, state: Gamestate, move: tuple) -> bool:
+        piece_coord, move_coord = move
+        piece_type = state.gamestate[piece_coord].kind
+        return True
