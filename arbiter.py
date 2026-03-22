@@ -1,5 +1,3 @@
-from os import stat
-
 from gamestate import Gamestate
 from pieces import Piece
 from utils import COLOR, KIND
@@ -11,10 +9,10 @@ class Arbiter:
 
     def is_valid_move(self, state: Gamestate, move: tuple) -> bool:
         piece_coord, move_coord = move
-        piece = state.gamestate[piece_coord]
+        piece = state.position[piece_coord]
         if piece is None or not self.is_valid_piece_coord(state, piece_coord):
             return False
-        if COLOR(state.move_number % 2) != state.gamestate[piece_coord].color:
+        if COLOR(not state.is_white_move) != state.position[piece_coord].color:
             return False
         if not self.is_valid_move_coord(state, move_coord):
             return False
@@ -23,9 +21,9 @@ class Arbiter:
         return True
 
     def is_valid_piece_coord(self, state: Gamestate, piece_coord: int) -> bool:
-        if len(state.gamestate) < piece_coord:
+        if len(state.position) < piece_coord:
             return False
-        elif not isinstance(state.gamestate[piece_coord], Piece):
+        elif not isinstance(state.position[piece_coord], Piece):
             return False
         else:
             return True
@@ -35,19 +33,13 @@ class Arbiter:
         return True
 
     def is_valid_move_coord(self, state: Gamestate, move_coord: int) -> bool:
-        if len(state.gamestate) < move_coord:
+        if len(state.position) < move_coord:
             return False
         else:
             return True
-
-    def is_white_to_move(self, state: Gamestate) -> bool:
-        if state.move_number % 2 == 1:
-            return True
-        else:
-            return False
 
     def is_valid_piece_move(self, state: Gamestate, move: tuple) -> bool:
-        kind = state.gamestate[move[0]].kind
+        kind = state.position[move[0]].kind
         if kind == KIND.KING and self.is_valid_king_move(state, move):
             return True
         if kind == KIND.QUEEN and self.is_valid_queen_move(state, move):
@@ -64,7 +56,7 @@ class Arbiter:
             return False
 
     def is_valid_king_move(self, gamestate: Gamestate, move: tuple) -> bool:
-        state = gamestate.gamestate
+        state = gamestate.position
         pos, dest = move
         valid_moves = [
             pos + 1,
@@ -88,7 +80,7 @@ class Arbiter:
             return False
 
     def is_valid_queen_move(self, gamestate: Gamestate, move: tuple) -> bool:
-        state = gamestate.gamestate
+        state = gamestate.position
         pos, dest = move
         valid_moves = [
             pos + 1,
@@ -106,7 +98,7 @@ class Arbiter:
             return False
 
     def is_valid_bishop_move(self, gamestate: Gamestate, move: tuple) -> bool:
-        state = gamestate.gamestate
+        state = gamestate.position
         pos, dest = move
         valid_moves = [
             pos + 1,
@@ -124,7 +116,7 @@ class Arbiter:
             return False
 
     def is_valid_knight_move(self, gamestate: Gamestate, move: tuple) -> bool:
-        state = gamestate.gamestate
+        state = gamestate.position
         pos, dest = move
         valid_moves = [pos - 10, pos - 6]
         if dest in valid_moves:
@@ -133,7 +125,7 @@ class Arbiter:
             return False
 
     def is_valid_rook_move(self, gamestate: Gamestate, move: tuple) -> bool:
-        state = gamestate.gamestate
+        state = gamestate.position
         pos, dest = move
         valid_moves = [
             pos + 1,
@@ -151,7 +143,7 @@ class Arbiter:
             return False
 
     def is_valid_pawn_move(self, gamestate: Gamestate, move: tuple) -> bool:
-        state = gamestate.gamestate
+        state = gamestate.position
         pos, dest = move
         color = state[pos].color
         valid_moves = []
