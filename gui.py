@@ -40,8 +40,8 @@ class GUI:
         for x in range(self.board.size):
             square = self.board.squares[x + n]
             piece = (
-                gamestate.gamestate[x + n]
-                if gamestate.gamestate[x + n] is not None
+                gamestate.position[x + n]
+                if gamestate.position[x + n] is not None
                 else None
             )
 
