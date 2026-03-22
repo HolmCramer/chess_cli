@@ -1,6 +1,8 @@
 from enum import Enum
 
 BOARD_SIZE = 8
+FEN_KIND = "rnbqkpPRNBQK"
+FEN_NUMBERS = "12345678"
 
 
 class COLOR(Enum):

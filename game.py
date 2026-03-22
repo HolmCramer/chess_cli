@@ -6,7 +6,7 @@ from gui import GUI
 class Game:
 
     def __init__(self) -> None:
-        self.gamestate = Gamestate()
+        self.gamestate = Gamestate.default()
         self.gui = GUI()
         self.arbiter = Arbiter()
 

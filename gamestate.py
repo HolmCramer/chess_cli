@@ -1,55 +1,77 @@
 from typing import Optional
 
 from pieces import *
-from utils import BOARD_SIZE, COLOR
+from utils import BOARD_SIZE, COLOR, FEN_KIND, FEN_NUMBERS
 
 
 class Gamestate:
 
-    def __init__(self) -> None:
+    def __init__(self, fen: str) -> None:
         self.move_number = 0
         self.en_passent = False
-        self.gamestate: list[Optional[Piece]] = [None for _ in range(BOARD_SIZE**2)]
-        self.whiteKing: list[King] = [King(COLOR.WHITE)]
-        self.whiteQueen: list[Queen] = [Queen(COLOR.WHITE)]
-        self.whiteBishop: list[Bishop] = [Bishop(COLOR.WHITE) for _ in range(2)]
-        self.whiteKnight: list[Knight] = [Knight(COLOR.WHITE) for _ in range(2)]
-        self.whiteRook: list[Rook] = [Rook(COLOR.WHITE) for _ in range(2)]
-        self.whitePawn: list[Pawn] = [Pawn(COLOR.WHITE) for _ in range(8)]
-        self.blackKing: list[King] = [King(COLOR.BLACK)]
-        self.blackQueen: list[Queen] = [Queen(COLOR.BLACK)]
-        self.blackBishop: list[Bishop] = [Bishop(COLOR.BLACK) for _ in range(2)]
-        self.blackKnight: list[Knight] = [Knight(COLOR.BLACK) for _ in range(2)]
-        self.blackRook: list[Rook] = [Rook(COLOR.BLACK) for _ in range(2)]
-        self.blackPawn: list[Pawn] = [Pawn(COLOR.BLACK) for _ in range(8)]
+        self.fen = fen
+        self.gamestate = self.gen_state()
 
-        self.gamestate[0] = self.blackRook[0]
-        self.gamestate[1] = self.blackKnight[0]
-        self.gamestate[2] = self.blackBishop[0]
-        self.gamestate[3] = self.blackQueen[0]
-        self.gamestate[4] = self.blackKing[0]
-        self.gamestate[5] = self.blackBishop[1]
-        self.gamestate[6] = self.blackKnight[1]
-        self.gamestate[7] = self.blackRook[1]
-        for square in range(8):
-            self.gamestate[8 + square] = self.blackPawn[square]
+    @classmethod
+    def default(cls) -> Gamestate:
+        return cls("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
 
-        for square in range(8):
-            self.gamestate[48 + square] = self.whitePawn[square]
-        self.gamestate[56] = self.whiteRook[0]
-        self.gamestate[57] = self.whiteKnight[0]
-        self.gamestate[58] = self.whiteBishop[0]
-        self.gamestate[59] = self.whiteQueen[0]
-        self.gamestate[60] = self.whiteKing[0]
-        self.gamestate[61] = self.whiteBishop[1]
-        self.gamestate[62] = self.whiteKnight[1]
-        self.gamestate[63] = self.whiteRook[1]
+    @classmethod
+    def with_fen(cls, fen: str) -> Gamestate:
+        return cls(fen)
+
+    def gen_state(self) -> list:
+        state: list[Optional[Piece]] = [None for _ in range(BOARD_SIZE**2)]
+        index = 0
+        for char in self.fen:
+            if char in FEN_NUMBERS:
+                index += int(char)
+                continue
+            if char in FEN_KIND:
+                print("in kind")
+                print(index)
+                state[index] = self.fen_gen_piece(char)
+                index += 1
+            if char == " " or index > 63:
+                break
+        return state
+
+    def fen_gen_piece(self, char: str) -> Optional[Piece]:
+        if char.islower():
+            color = COLOR.BLACK
+            if char == "r":
+                return Rook(color)
+            if char == "n":
+                return Knight(color)
+            if char == "b":
+                return Bishop(color)
+            if char == "q":
+                return Queen(color)
+            if char == "k":
+                return King(color)
+            if char == "p":
+                return Pawn(color)
+        else:
+            color = COLOR.WHITE
+            if char == "R":
+                return Rook(color)
+            if char == "N":
+                return Knight(color)
+            if char == "B":
+                return Bishop(color)
+            if char == "Q":
+                return Queen(color)
+            if char == "K":
+                return King(color)
+            if char == "P":
+                return Pawn(color)
+        return None
 
     def move(self, move: tuple) -> None:
         piece_coord, move_coord = move
 
         if self.gamestate[piece_coord] is None:
-            print("Enter a square with a piece on it!")
+            print("enter a square with a piece on it!")
         elif (
             self.gamestate[move_coord] is not None or self.gamestate[move_coord] is None
         ):
@@ -69,3 +91,6 @@ class Gamestate:
             self.en_passent = True
         else:
             self.en_passent = False
+
+    def init_fen_state(self) -> None:
+        pass
