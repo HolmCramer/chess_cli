@@ -7,10 +7,10 @@ from utils import BOARD_SIZE, COLOR, FEN_KIND, FEN_NUMBERS
 class Gamestate:
 
     def __init__(self, fen: str) -> None:
-        self.move_number = 0
-        self.en_passent = False
-        self.fen = fen
-        self.gamestate = self.gen_state()
+        self.move_number: int = 0
+        self.en_passent: bool = False
+        self.fen: str = fen
+        self.gamestate: list[Optional[Piece]] = self.gen_state()
 
     @classmethod
     def default(cls) -> Gamestate:
