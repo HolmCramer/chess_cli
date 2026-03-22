@@ -1,65 +1,134 @@
 from typing import Optional
 
-from board import Board
 from pieces import *
-from utils import BOARD_SIZE, COLOR
+from utils import BOARD_SIZE, COLOR, FEN_KIND, FEN_NUMBERS, notation_to_index
 
 
 class Gamestate:
 
-    def __init__(self) -> None:
-        self.gamestate: list[Optional[Piece]] = [None for _ in range(BOARD_SIZE**2)]
-        self.whiteKing: list[King] = [King(COLOR.WHITE)]
-        self.whiteQueen: list[Queen] = [Queen(COLOR.WHITE)]
-        self.whiteBishop: list[Bishop] = [Bishop(COLOR.WHITE) for _ in range(2)]
-        self.whiteKnight: list[Knight] = [Knight(COLOR.WHITE) for _ in range(2)]
-        self.whiteRook: list[Rook] = [Rook(COLOR.WHITE) for _ in range(2)]
-        self.whitePawn: list[Pawn] = [Pawn(COLOR.WHITE) for _ in range(8)]
-        self.blackKing: list[King] = [King(COLOR.BLACK)]
-        self.blackQueen: list[Queen] = [Queen(COLOR.BLACK)]
-        self.blackBishop: list[Bishop] = [Bishop(COLOR.BLACK) for _ in range(2)]
-        self.blackKnight: list[Knight] = [Knight(COLOR.BLACK) for _ in range(2)]
-        self.blackRook: list[Rook] = [Rook(COLOR.BLACK) for _ in range(2)]
-        self.blackPawn: list[Pawn] = [Pawn(COLOR.BLACK) for _ in range(8)]
+    def __init__(self, fen: str) -> None:
+        self.fen: str = fen
+        self.position: list[Optional[Piece]] = self.gen_position()
+        self.is_white_move: bool = self.gen_is_white_move()
+        self.castle_rights: str = self.gen_castle_rights()
+        self.en_passent: Optional[int] = self.gen_en_passent()
+        self.half_move_clock: int = self.gen_half_move_clock()
+        self.full_move_number: int = self.gen_full_move_number()
 
-        self.gamestate[0] = self.blackRook[0]
-        self.gamestate[1] = self.blackKnight[0]
-        self.gamestate[2] = self.blackBishop[0]
-        self.gamestate[3] = self.blackQueen[0]
-        self.gamestate[4] = self.blackKing[0]
-        self.gamestate[5] = self.blackBishop[1]
-        self.gamestate[6] = self.blackKnight[1]
-        self.gamestate[7] = self.blackRook[1]
-        for square in range(8):
-            self.gamestate[8 + square] = self.blackPawn[square]
+    @classmethod
+    def default(cls) -> Gamestate:
+        return cls("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
 
-        for square in range(8):
-            self.gamestate[48 + square] = self.whitePawn[square]
-        self.gamestate[56] = self.whiteRook[0]
-        self.gamestate[57] = self.whiteKnight[0]
-        self.gamestate[58] = self.whiteBishop[0]
-        self.gamestate[59] = self.whiteQueen[0]
-        self.gamestate[60] = self.whiteKing[0]
-        self.gamestate[61] = self.whiteBishop[1]
-        self.gamestate[62] = self.whiteKnight[1]
-        self.gamestate[63] = self.whiteRook[1]
+    @classmethod
+    def with_fen(cls, fen: str) -> Gamestate:
+        return cls(fen)
 
-    def move(self, chessNotation: str, board: Board) -> None:
+    def gen_full_move_number(self) -> int:
+        return int(self.fen.split(" ")[5])
 
-        pieceCoords = chessNotation[:2]
-        moveCoords = chessNotation[-2::]
+    def gen_half_move_clock(self) -> int:
+        return int(self.fen.split(" ")[4])
 
-        ConvPieceCoords = board.inputConv(pieceCoords)
-        ConvMoveCoords = board.inputConv(moveCoords)
+    def gen_is_white_move(self) -> bool:
+        if self.fen.split(" ")[1] == "w":
+            return True
+        else:
+            return False
 
-        if self.gamestate[ConvPieceCoords] is None:
-            print("Enter a square with a piece on it!")
-        elif (
-            self.gamestate[ConvMoveCoords] is not None
-            or self.gamestate[ConvMoveCoords] is None
-        ):
-            self.gamestate[ConvMoveCoords] = self.gamestate[ConvPieceCoords]
-            self.gamestate[ConvPieceCoords] = None
+    def gen_position(self) -> list[Optional[Piece]]:
+        position: list[Optional[Piece]] = [None for _ in range(BOARD_SIZE**2)]
+        fen = self.fen.split(" ")
+        print(fen)
+        index = 0
+
+        for char in fen[0]:
+            if char in FEN_NUMBERS:
+                index += int(char)
+                continue
+            if char in FEN_KIND:
+                position[index] = self.fen_gen_piece(char)
+                index += 1
+
+        return position
+
+    def gen_castle_rights(self) -> str:
+        fen = self.fen.split(" ")[2]
+        return fen
+
+    def gen_en_passent(self) -> Optional[int]:
+        en_passent = self.fen.split(" ")[3]
+        if en_passent == "-":
+            return None
+        else:
+            return notation_to_index(en_passent)
+
+    def fen_gen_piece(self, char: str) -> Optional[Piece]:
+        if char.islower():
+            color = COLOR.BLACK
+            if char == "r":
+                return Rook(color)
+            if char == "n":
+                return Knight(color)
+            if char == "b":
+                return Bishop(color)
+            if char == "q":
+                return Queen(color)
+            if char == "k":
+                return King(color)
+            if char == "p":
+                return Pawn(color)
+        else:
+            color = COLOR.WHITE
+            if char == "R":
+                return Rook(color)
+            if char == "N":
+                return Knight(color)
+            if char == "B":
+                return Bishop(color)
+            if char == "Q":
+                return Queen(color)
+            if char == "K":
+                return King(color)
+            if char == "P":
+                return Pawn(color)
+        return None
+
+    def move(self, move: tuple) -> None:
+        piece_coord, move_coord = move
+
+        if self.position[piece_coord] is None:
+            print("enter a square with a piece on it!")
+        elif self.position[move_coord] is not None or self.position[move_coord] is None:
+            self.update_state()
+            self.position[move_coord] = self.position[piece_coord]
+            self.position[piece_coord] = None
             print("Move done!")
         else:
             print("Enter a valid square to move to!")
+
+    def update_state(self) -> None:
+        # need more updates
+        self.increment_half_move_clock()
+        self.increment_full_move_number()
+        self.update_is_white_move()
+        return
+
+    def increment_full_move_number(self) -> None:
+        if not self.is_white_move:
+            self.full_move_number += 1
+        else:
+            return
+
+    def increment_half_move_clock(self) -> None:
+        # no pawn move or capture in the last 50 moves
+        self.half_move_clock += 1
+        return
+
+    def update_is_white_move(self) -> None:
+        if self.is_white_move:
+            self.is_white_move = False
+        else:
+            self.is_white_move = True
+
+    def init_fen_state(self) -> None:
+        pass

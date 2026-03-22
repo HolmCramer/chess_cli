@@ -40,8 +40,8 @@ class GUI:
         for x in range(self.board.size):
             square = self.board.squares[x + n]
             piece = (
-                gamestate.gamestate[x + n]
-                if gamestate.gamestate[x + n] is not None
+                gamestate.position[x + n]
+                if gamestate.position[x + n] is not None
                 else None
             )
 
@@ -91,3 +91,20 @@ class GUI:
         print("Enter a Valid Move like in the Format 'D2 to D4'!")
         moveInput = input("Enter a Move: ").upper()
         return moveInput
+
+    def to_move(self, input: str) -> tuple:
+        piece_coords = input[:2]
+        move_coords = input[-2::]
+
+        conv_piece_coords = self.input_conv(piece_coords)
+        conv_move_coords = self.input_conv(move_coords)
+        return conv_piece_coords, conv_move_coords
+
+    def input_conv(self, chess_notation: str) -> int:
+        index = 0
+
+        for i, square in enumerate(self.board.squares):
+            if square is not None and square.coord == chess_notation:
+                index = i
+
+        return index

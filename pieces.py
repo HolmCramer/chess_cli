@@ -1,77 +1,87 @@
+from utils import COLOR, KIND
+
+
 class Piece:
 
-    def __init__(self, pieceColor):
-        self.pieceColor = pieceColor
+    def __init__(self, color: COLOR, kind: KIND) -> None:
+        self.color = color
+        self.kind = kind
         self.icon = ""
 
 
 class King(Piece):
-    whiteKing = "♔"
-    blackKing = "♚"
+    black_king = "♔"
+    white_king = "♚"
+    kind = KIND.KING
 
-    def __init__(self, pieceColor):
-        super().__init__(pieceColor)
-        if self.pieceColor == 0:
-            self.icon = self.whiteKing
+    def __init__(self, color):
+        super().__init__(color, self.kind)
+        if self.color == COLOR.WHITE:
+            self.icon = self.white_king
         else:
-            self.icon = self.blackKing
+            self.icon = self.black_king
 
 
 class Queen(Piece):
-    whiteQueen = "♕"
-    blackQueen = "♛"
+    black_queen = "♕"
+    white_queen = "♛"
+    kind = KIND.QUEEN
 
-    def __init__(self, pieceColor):
-        super().__init__(pieceColor)
-        if self.pieceColor == 0:
-            self.icon = self.whiteQueen
+    def __init__(self, color):
+        super().__init__(color, self.kind)
+        if self.color == COLOR.WHITE:
+            self.icon = self.white_queen
         else:
-            self.icon = self.blackQueen
+            self.icon = self.black_queen
 
 
 class Bishop(Piece):
-    whiteBishop = "♗"
-    blackBishop = "♝"
+    black_bishop = "♗"
+    white_bishop = "♝"
+    kind = KIND.BISHOP
 
-    def __init__(self, pieceColor):
-        super().__init__(pieceColor)
-        if self.pieceColor == 0:
-            self.icon = self.whiteBishop
+    def __init__(self, color):
+        super().__init__(color, self.kind)
+        if self.color == COLOR.WHITE:
+            self.icon = self.white_bishop
         else:
-            self.icon = self.blackBishop
+            self.icon = self.black_bishop
 
 
 class Knight(Piece):
-    whiteKnight = "♘"
-    blackKnight = "♞"
+    black_knight = "♘"
+    white_knight = "♞"
+    kind = KIND.KNIGHT
 
-    def __init__(self, pieceColor):
-        super().__init__(pieceColor)
-        if self.pieceColor == 0:
-            self.icon = self.whiteKnight
+    def __init__(self, color):
+        super().__init__(color, self.kind)
+        if self.color == COLOR.WHITE:
+            self.icon = self.white_knight
         else:
-            self.icon = self.blackKnight
+            self.icon = self.black_knight
 
 
 class Rook(Piece):
-    whiteRook = "♖"
-    blackRook = "♜"
+    black_rook = "♖"
+    white_rook = "♜"
+    kind = KIND.ROOK
 
-    def __init__(self, pieceColor):
-        super().__init__(pieceColor)
-        if self.pieceColor == 0:
-            self.icon = self.whiteRook
+    def __init__(self, color):
+        super().__init__(color, self.kind)
+        if self.color == COLOR.WHITE:
+            self.icon = self.white_rook
         else:
-            self.icon = self.blackRook
+            self.icon = self.black_rook
 
 
 class Pawn(Piece):
-    whitePawn = "♙"
-    blackPawn = "♟"
+    black_pawn = "♙"
+    white_pawn = "♟"
+    kind = KIND.PAWN
 
-    def __init__(self, pieceColor):
-        super().__init__(pieceColor)
-        if self.pieceColor == 0:
-            self.icon = self.whitePawn
+    def __init__(self, color):
+        super().__init__(color, self.kind)
+        if self.color == COLOR.WHITE:
+            self.icon = self.white_pawn
         else:
-            self.icon = self.blackPawn
+            self.icon = self.black_pawn
