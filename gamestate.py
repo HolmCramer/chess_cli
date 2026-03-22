@@ -1,7 +1,14 @@
 from typing import Optional
 
 from pieces import *
-from utils import BOARD_SIZE, COLOR, FEN_KIND, FEN_NUMBERS, notation_to_index
+from utils import (
+    BOARD_SIZE,
+    COLOR,
+    DEFAULT_POS,
+    FEN_KIND,
+    FEN_NUMBERS,
+    notation_to_index,
+)
 
 
 class Gamestate:
@@ -17,7 +24,7 @@ class Gamestate:
 
     @classmethod
     def default(cls) -> Gamestate:
-        return cls("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+        return cls(DEFAULT_POS)
 
     @classmethod
     def with_fen(cls, fen: str) -> Gamestate:
@@ -102,6 +109,7 @@ class Gamestate:
             self.update_state(move)
             self.position[move_coord] = self.position[piece_coord]
             self.position[piece_coord] = None
+            self.update_fen()
             print("Move done!")
         else:
             print("Enter a valid square to move to!")
@@ -111,7 +119,6 @@ class Gamestate:
         self.increment_half_move_clock(move)
         self.increment_full_move_number()
         self.update_is_white_move()
-        self.update_fen()
         return
 
     def update_fen(self) -> None:
@@ -140,7 +147,6 @@ class Gamestate:
             self.position[move[1]] is not None
             and self.position[move[1]].color != self.position[move[0]].color
         ):
-            print("help")
             self.half_move_clock = 0
             return
         else:
@@ -152,6 +158,3 @@ class Gamestate:
             self.is_white_move = False
         else:
             self.is_white_move = True
-
-    def init_fen_state(self) -> None:
-        pass

@@ -4,6 +4,7 @@ BOARD_SIZE = 8
 NOTATION_CHARS = "abcdefgh"
 FEN_KIND = "rnbqkpPRNBQK"
 FEN_NUMBERS = "12345678"
+DEFAULT_POS = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
 
 class COLOR(Enum):
