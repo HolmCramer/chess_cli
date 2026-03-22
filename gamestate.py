@@ -1,6 +1,5 @@
 from typing import Optional
 
-from board import Board
 from pieces import *
 from utils import BOARD_SIZE, COLOR
 
@@ -8,6 +7,7 @@ from utils import BOARD_SIZE, COLOR
 class Gamestate:
 
     def __init__(self) -> None:
+        self.move_number = 0
         self.gamestate: list[Optional[Piece]] = [None for _ in range(BOARD_SIZE**2)]
         self.whiteKing: list[King] = [King(COLOR.WHITE)]
         self.whiteQueen: list[Queen] = [Queen(COLOR.WHITE)]
@@ -54,6 +54,10 @@ class Gamestate:
         ):
             self.gamestate[move_coord] = self.gamestate[piece_coord]
             self.gamestate[piece_coord] = None
+            self.increment_move_number()
             print("Move done!")
         else:
             print("Enter a valid square to move to!")
+
+    def increment_move_number(self) -> None:
+        self.move_number += 1
