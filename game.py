@@ -18,5 +18,5 @@ class Game:
                 break
             else:
                 move = self.gui.to_move(input)
-                if self.arbiter.check(self.gamestate, move):
+                if self.arbiter.is_valid_move(self.gamestate, move):
                     self.gamestate.move(move)
