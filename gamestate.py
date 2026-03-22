@@ -44,22 +44,16 @@ class Gamestate:
         self.gamestate[62] = self.whiteKnight[1]
         self.gamestate[63] = self.whiteRook[1]
 
-    def move(self, chessNotation: str, board: Board) -> None:
+    def move(self, move: tuple) -> None:
+        piece_coord, move_coord = move
 
-        pieceCoords = chessNotation[:2]
-        moveCoords = chessNotation[-2::]
-
-        ConvPieceCoords = board.inputConv(pieceCoords)
-        ConvMoveCoords = board.inputConv(moveCoords)
-
-        if self.gamestate[ConvPieceCoords] is None:
+        if self.gamestate[piece_coord] is None:
             print("Enter a square with a piece on it!")
         elif (
-            self.gamestate[ConvMoveCoords] is not None
-            or self.gamestate[ConvMoveCoords] is None
+            self.gamestate[move_coord] is not None or self.gamestate[move_coord] is None
         ):
-            self.gamestate[ConvMoveCoords] = self.gamestate[ConvPieceCoords]
-            self.gamestate[ConvPieceCoords] = None
+            self.gamestate[move_coord] = self.gamestate[piece_coord]
+            self.gamestate[piece_coord] = None
             print("Move done!")
         else:
             print("Enter a valid square to move to!")
