@@ -88,7 +88,7 @@ class GUI:
 
     def enterMove(self) -> str:
         moveInput = ""
-        print("Enter a Valid Move like in the Format 'D2 to D4'!")
+        print("Enter a Valid Move like in the Format 'D2 D4'!")
         moveInput = input("Enter a Move: ").upper()
         return moveInput
 
