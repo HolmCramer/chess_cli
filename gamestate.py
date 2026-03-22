@@ -8,6 +8,7 @@ class Gamestate:
 
     def __init__(self) -> None:
         self.move_number = 0
+        self.en_passent = False
         self.gamestate: list[Optional[Piece]] = [None for _ in range(BOARD_SIZE**2)]
         self.whiteKing: list[King] = [King(COLOR.WHITE)]
         self.whiteQueen: list[Queen] = [Queen(COLOR.WHITE)]
@@ -52,12 +53,19 @@ class Gamestate:
         elif (
             self.gamestate[move_coord] is not None or self.gamestate[move_coord] is None
         ):
+            self.switch_en_passent(self.gamestate[piece_coord].kind)
+            self.increment_move_number()
             self.gamestate[move_coord] = self.gamestate[piece_coord]
             self.gamestate[piece_coord] = None
-            self.increment_move_number()
             print("Move done!")
         else:
             print("Enter a valid square to move to!")
 
     def increment_move_number(self) -> None:
         self.move_number += 1
+
+    def switch_en_passent(self, kind: KIND) -> None:
+        if kind is KIND.PAWN:
+            self.en_passent = True
+        else:
+            self.en_passent = False

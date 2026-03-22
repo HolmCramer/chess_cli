@@ -11,9 +11,10 @@ class Arbiter:
 
     def is_valid_move(self, state: Gamestate, move: tuple) -> bool:
         piece_coord, move_coord = move
-        if COLOR(state.move_number % 2) != state.gamestate[piece_coord].color:
+        piece = state.gamestate[piece_coord]
+        if piece is None or not self.is_valid_piece_coord(state, piece_coord):
             return False
-        if not self.is_valid_piece_coord(state, piece_coord):
+        if COLOR(state.move_number % 2) != state.gamestate[piece_coord].color:
             return False
         if not self.is_valid_move_coord(state, move_coord):
             return False
@@ -156,15 +157,77 @@ class Arbiter:
         state = gamestate.gamestate
         pos, dest = move
         color = state[pos].color
-        if color == COLOR.WHITE:
-            valid_moves = [
-                pos - 8,
-            ]
-        else:
-            valid_moves = [
-                pos + 9,
-            ]
+        valid_moves = []
+
+        if color == COLOR.WHITE and pos - 8 == dest and state[dest] is None:
+            valid_moves.append(pos - 8)
+        elif pos + 8 == dest and state[dest] is None:
+            valid_moves.append(pos + 8)
+
+        if (
+            color == COLOR.WHITE
+            and pos // 8 == 6
+            and state[pos - 16] is None
+            and state[pos - 8] is None
+        ):
+            valid_moves.append(pos - 16)
+        elif pos // 8 == 1 and state[pos + 8] is None and state[pos + 16] is None:
+            valid_moves.append(pos + 16)
+
+        if (
+            color == COLOR.WHITE
+            and isinstance(state[dest], Piece)
+            and state[dest].color is COLOR.BLACK
+            and (dest == pos - 9 or dest == pos - 7)
+        ):
+            valid_moves.append(dest)
+        elif (
+            isinstance(state[dest], Piece)
+            and state[dest].color is COLOR.WHITE
+            and (dest == pos + 9 or dest == pos + 7)
+        ):
+            valid_moves.append(dest)
+
+        if (
+            color == COLOR.WHITE
+            and pos // 8 == 3
+            and gamestate.en_passent
+            and state[pos - 1] is not None
+            and state[pos - 1].color == COLOR.BLACK
+        ):
+            valid_moves.append(pos - 9)
+            state[pos - 1] = None
+        elif (
+            color == COLOR.WHITE
+            and pos // 8 == 3
+            and gamestate.en_passent
+            and state[pos + 1] is not None
+            and state[pos + 1].color == COLOR.BLACK
+        ):
+            valid_moves.append(pos - 7)
+            state[pos + 1] = None
+
+        if (
+            color == COLOR.BLACK
+            and pos // 8 == 4
+            and gamestate.en_passent
+            and state[pos - 1] is not None
+            and state[pos - 1].color == COLOR.WHITE
+        ):
+            valid_moves.append(pos + 7)
+            state[pos - 1] = None
+        elif (
+            color == COLOR.BLACK
+            and pos // 8 == 4
+            and gamestate.en_passent
+            and state[pos + 1] is not None
+            and state[pos + 1].color == COLOR.WHITE
+        ):
+            valid_moves.append(pos + 9)
+            state[pos + 1] = None
+
         if dest in valid_moves:
             return True
         else:
+            print(valid_moves)
             return False
