@@ -99,18 +99,34 @@ class Gamestate:
         if self.position[piece_coord] is None:
             print("enter a square with a piece on it!")
         elif self.position[move_coord] is not None or self.position[move_coord] is None:
-            self.update_state()
+            self.update_state(move)
             self.position[move_coord] = self.position[piece_coord]
             self.position[piece_coord] = None
             print("Move done!")
         else:
             print("Enter a valid square to move to!")
 
-    def update_state(self) -> None:
+    def update_state(self, move: tuple) -> None:
         # need more updates
-        self.increment_half_move_clock()
+        self.increment_half_move_clock(move)
         self.increment_full_move_number()
         self.update_is_white_move()
+        self.update_fen()
+        return
+
+    def update_fen(self) -> None:
+        fen = self.fen.split(" ")
+
+        if self.is_white_move is True:
+            fen[1] = "w"
+        else:
+            fen[1] = "b"
+
+        fen[4] = str(self.half_move_clock)
+        fen[5] = str(self.full_move_number)
+
+        fen = " ".join(fen)
+        self.fen = fen
         return
 
     def increment_full_move_number(self) -> None:
@@ -119,10 +135,17 @@ class Gamestate:
         else:
             return
 
-    def increment_half_move_clock(self) -> None:
-        # no pawn move or capture in the last 50 moves
-        self.half_move_clock += 1
-        return
+    def increment_half_move_clock(self, move: tuple) -> None:
+        if isinstance(self.position[move[0]], Pawn) or (
+            self.position[move[1]] is not None
+            and self.position[move[1]].color != self.position[move[0]].color
+        ):
+            print("help")
+            self.half_move_clock = 0
+            return
+        else:
+            self.half_move_clock += 1
+            return
 
     def update_is_white_move(self) -> None:
         if self.is_white_move:

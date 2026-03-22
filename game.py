@@ -13,6 +13,7 @@ class Game:
     def play(self) -> None:
         while True:
             self.gui.drawBoard(self.gamestate)
+            print(self.gamestate.fen)
             input = self.gui.enterMove()
             if input == "QUIT" or input == "Q":
                 break
